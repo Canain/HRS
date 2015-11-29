@@ -51,7 +51,7 @@
         <div class="col s6">
         <h2>Delete Card</h2>
           <!-- Dropdown Trigger -->
-          <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Drop Me!</a>
+          <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Card Number</a>
 
           <!-- Stored Credit card numbers go here -->
           <ul id='dropdown1' class='dropdown-content'>
