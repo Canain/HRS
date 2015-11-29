@@ -30,6 +30,7 @@
           </div>
         </div>
         <a class="waves-effect waves-light btn">Login</a>
+        <a class="waves-effect waves-light btn">New User</a>
         </form>
       </div>
     <!-- </div> -->
