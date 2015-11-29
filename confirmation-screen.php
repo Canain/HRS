@@ -15,7 +15,7 @@
       <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
       <script type="text/javascript" src="js/materialize.min.js"></script>
       <h2>Confirmation</h2>
-      <h4 id="reservation_id">Your Reservation ID: </h4>
+      <h4 id='reservation_id'><!-- variable: reservation_id --> Your Reservation ID: </h4>
       <h6>Please save this reservation id for all further communication</h6>
     </body>
   </html>

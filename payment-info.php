@@ -55,9 +55,9 @@
 
           <!-- Stored Credit card numbers go here -->
           <ul id='dropdown1' class='dropdown-content'>
-            <li><a href="#!">8219</a></li>
-            <li><a href="#!">1234</a></li>
-            <li><a href="#!">4321</a></li>
+            <li><a href="#!"><!-- VARIABLE: CARD NO1 -->8219</a></li>
+            <li><a href="#!"><!-- VARIABLE: CARD NO2 -->1234</a></li>
+            <li><a href="#!"><!-- VARIABLE: CARD NO3 -->4321</a></li>
           </ul>
         </div>
       </div>
