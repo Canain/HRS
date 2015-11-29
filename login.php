@@ -19,8 +19,8 @@
         <form class="col s8">
         <div class="row">
           <div class="input-field col s8">
-            <input id="email" type="email" class="validate">
-            <label for="email">Email</label>
+            <input id="username" type="email" class="validate">
+            <label for="username">Username</label>
           </div>
         </div>
         <div class="row">

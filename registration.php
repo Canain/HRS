@@ -28,6 +28,10 @@
             </div>
           </div>
           <div class="row">
+          <div class="input-field col s8">
+              <input id="username" type="email" class="validate">
+              <label for="username">Username</label>
+            </div>
             <div class="input-field col s8">
               <input id="password" type="password" class="validate">
               <label for="disabled">Password</label>
