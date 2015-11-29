@@ -46,6 +46,9 @@
 
       <a class="waves-effect waves-light btn">Search</a>
 
+      <div>
+        <!-- LIST OF OPEN ROOMS GO HERE -->
+      </div>
 
     </body>
   </html>
