@@ -1,0 +1,56 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body>
+      <!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+
+        <!-- Dropdown Trigger -->
+        <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Locations</a>
+
+        <!-- Dropdown Structure -->
+        <ul id='dropdown1' class='dropdown-content'>
+          <li><a href="#!">Atlanta</a></li>
+          <li><a href="#!">Charlotte</a></li>
+          <li><a href="#!">Savannah</a></li>
+          <li><a href="#!">Orlando</a></li>
+          <li><a href="#!">Miami</a></li>
+        </ul>
+
+        <p></p>
+
+        <!-- Dropdown Trigger -->
+        <a class='dropdown-button btn' href='#' data-activates='dropdown2'>Rating</a>
+
+        <!-- Dropdown Structure -->
+        <ul id='dropdown2' class='dropdown-content'>
+          <li><a href="#!">Excellent</a></li>
+          <li><a href="#!">Good</a></li>
+          <li><a href="#!">Bad</a></li>
+          <li><a href="#!">Very Bad</a></li>
+          <li><a href="#!">Neutral</a></li>
+        </ul>
+
+        <div class="row">
+          <form class="col s12">
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="textarea1" class="materialize-textarea"></textarea>
+                <label for="textarea1">Comment</label>
+              </div>
+            </div>
+          </form>
+        </div>
+
+    </body>
+  </html>
