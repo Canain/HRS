@@ -1,3 +1,6 @@
+<?php
+require 'db.php';
+?>
   <!DOCTYPE html>
   <html>
     <head>
@@ -19,22 +22,26 @@
         
         <div class="col s6">
         <!--  SHOWN FOR CUSTOMER  -->
-          <div class="collection">
-            <a href="#!" class="collection-item">Make a new reservation</a>
-            <a href="#!" class="collection-item">Update your reservation</a>
-            <a href="#!" class="collection-item">Cancel reservation</a>
-            <a href="#!" class="collection-item">Provide feedback</a>
-            <a href="#!" class="collection-item">View feedback</a>
-          </div>
+            <?php if (!$_SESSION["manager"]) : ?>
+                  <div class="collection">
+                    <a href="make-reservation.php" class="collection-item">Make a new reservation</a>
+                    <a href="update-reservation.php" class="collection-item">Update your reservation</a>
+                    <a href="update-reservation.php" class="collection-item">Cancel reservation</a>
+                    <a href="give-review.php" class="collection-item">Provide feedback</a>
+                    <a href="#" class="collection-item">View feedback</a>
+                  </div>
+            <?php endif; ?>
         </div>
 
         <div class="col s6">
         <!--  SHOWN FOR MANAGEMENT  -->
-        <div class="collection">
-            <a href="#!" class="collection-item">View Reservation report</a>
-            <a href="#!" class="collection-item">View popular room category report</a>
-            <a href="#!" class="collection-item">View revenue report</a>
-          </div>
+            <?php if ($_SESSION["manager"]) : ?>
+                <div class="collection">
+                    <a href="#!" class="collection-item">View Reservation report</a>
+                    <a href="#!" class="collection-item">View popular room category report</a>
+                    <a href="#!" class="collection-item">View revenue report</a>
+                  </div>
+            <?php endif; ?>
         </div>
       </div>
 

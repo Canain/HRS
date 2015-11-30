@@ -7,8 +7,21 @@ if (isset($_POST["username"])) {
         $sql = 'SELECT * FROM customer WHERE username = :username AND password = :password';
         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $st->execute(array(':username' => $username, ':password' => $password));
-        if($st->rowCount()) {
+        if ($st->rowCount()) {
+            $_SESSION["username"] = $username;
+            $_SESSION["manager"] = false;
             header('Location: choose-functionality.php');
+        } else {
+            $sql = 'SELECT * FROM management WHERE username = :username AND password = :password';
+            $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $st->execute(array(':username' => $username, ':password' => $password));
+            if ($st->rowCount()) {
+                $_SESSION["username"] = $username;
+                $_SESSION["manager"] = true;
+                header('Location: choose-functionality.php');
+            } else {
+                print "No username found matching that password";
+            }
         }
     } catch(PDOException $ex) {
         print $ex;
