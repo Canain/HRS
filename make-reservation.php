@@ -77,12 +77,12 @@
                   <div class="col s12">
                       <div class="row">
                           <div class="input-field col s6">
-                              <input disabled id="start_date" type="date" class="validate"/>
-                              <label for="start_date">Start Date</label>
+                              <input type="date" class="validate"/>
+                              <label for="start_date"></label>
                           </div>
                           <div class="input-field col s6">
-                              <input disabled id="end_date" type="date" class="validate"/>
-                              <label for="end_date">End Date</label>
+                              <input type="date" class="validate"/>
+                              <label for="end_date"></label>
                           </div>
                       </div>
                       <div class="row">
