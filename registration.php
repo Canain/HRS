@@ -36,16 +36,10 @@ if (isset($_POST["username"])) {
         <div class="row">
         <form class="col s8" method="post">
           <div class="row">
-            <div class="input-field col s8">
-              <input id="username" name="username" type="text" class="validate">
-              <label for="username">Username</label>
-            </div>
-          </div>
-          <div class="row">
-          <div class="input-field col s8">
-              <input id="username" type="email" class="validate">
-              <label for="username">Username</label>
-            </div>
+              <div class="input-field col s8">
+                  <input id="username" name="username" type="text" class="validate">
+                  <label for="username">Username</label>
+              </div>
             <div class="input-field col s8">
               <input id="password" name="password" type="password" class="validate">
               <label for="disabled">Password</label>
