@@ -1,3 +1,21 @@
+<?php
+require 'db.php';
+if (isset($_POST["username"])) {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    try {
+        $sql = 'SELECT * FROM customer WHERE username = :username AND password = :password';
+        $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $st->execute(array(':username' => $username, ':password' => $password));
+        if($st->rowCount()) {
+            header('Location: choose-functionality.php');
+        }
+    } catch(PDOException $ex) {
+        print $ex;
+    }
+    exit;
+}
+?>
   <!DOCTYPE html>
   <html>
     <head>
@@ -16,21 +34,21 @@
       <script type="text/javascript" src="js/materialize.min.js"></script>
       <!-- <div class="valign-wrapper"> -->
         <div class="row">
-        <form class="col s8">
+        <form method="post" class="col s8">
         <div class="row">
           <div class="input-field col s8">
-            <input id="username" type="email" class="validate">
+            <input id="username" name="username" type="text" class="validate">
             <label for="username">Username</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s8">
-            <input id="password" type="password" class="validate">
+            <input id="password" name="password" type="password" class="validate">
             <label for="password">Password</label>
           </div>
         </div>
-        <a class="waves-effect waves-light btn">Login</a>
-        <a class="waves-effect waves-light btn">New User</a>
+        <button type="submit" class="waves-effect waves-light btn">Login</button>
+        <a href="registration.php" class="waves-effect waves-light btn">New User</a>
         </form>
       </div>
     <!-- </div> -->
