@@ -64,7 +64,6 @@ require 'start.php';
 
             <tbody>
             <!--Example row with data from room table-->
-
                 <?php
                 $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
                 foreach ($months as $month) {
