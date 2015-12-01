@@ -51,10 +51,6 @@ require 'start.php';
         echo "Location not set";
     }
     ?>
-    <tr>
-        <td>Rating</td>       <!-- variable rating -->
-        <td>Comment</td>      <!-- variable comment -->
-    </tr>
     </tbody>
 </table>
 <?php require 'end.php';
