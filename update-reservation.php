@@ -21,7 +21,27 @@ if (isset($_POST['reservation_id'])) {
 if (isset($_POST['new_start_date'])) {
     $new_start_date = $_POST['new_start_date'];
     $new_end_date = $_POST['new_end_date'];
+    $sql = "SELECT
+                *
+            FROM
+                room
+            WHERE
 
+                location = :location
+                    AND num NOT IN (SELECT
+                        r.num
+                    FROM
+                        room AS r,
+                        reservation AS rs,
+                        reservation_has_room AS rhr
+                    WHERE
+                        r.num = rhr.room_no
+                            AND rs.reservation_id = rhr.reservation_id
+                            AND is_cancelled = 0
+                            AND rhr.location = :location
+                            AND ((DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date)
+                                OR (DATE(start_date) <= :end_date AND DATE(end_date) >= :end_date)
+                                OR (DATE(start_date) >= :start_date AND DATE(end_date) <= :end_date)))";
 }
 require 'start.php';
 ?>
