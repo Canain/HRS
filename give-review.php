@@ -15,16 +15,6 @@ if (isset($_POST["location-dropdown"]) && isset($_POST["rating-dropdown"]) && is
 }
 require 'start.php';
 ?>
-<a class='dropdown-button btn' href='#' data-activates='dropdown1'>Locations</a>
-
-<!-- Dropdown Structure -->
-<ul id='dropdown1' class='dropdown-content'>
-    <li><a href="#!">Atlanta</a></li>
-    <li><a href="#!">Charlotte</a></li>
-    <li><a href="#!">Savannah</a></li>
-    <li><a href="#!">Orlando</a></li>
-    <li><a href="#!">Miami</a></li>
-</ul>
 
 <select name="location-dropdown" class="browser-default">
     <option disabled selected value="">Location</option>
@@ -39,11 +29,11 @@ require 'start.php';
 
 <select name="rating-dropdown" class="browser-default">
     <option disabled selected value="">Rating</option>
-    <option value="Excellent">Atlanta</option>
-    <option value="Good">Charlotte</option>
-    <option value="Bad">Savannah</option>
-    <option value="Very Bad">Orlando</option>
-    <option value="Neutral">Miami</option>
+    <option value="Excellent">Excellent</option>
+    <option value="Good">Good</option>
+    <option value="Bad">Bad</option>
+    <option value="Very Bad">Very Bad</option>
+    <option value="Neutral">Neutral</option>
 </select>
 
 <div class="row">

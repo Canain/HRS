@@ -15,7 +15,7 @@ require 'start.php';
             <!--Example row with data from room table-->
             <tr>
                 <td>August</td>       <!-- variable month -->
-                <td>Orlanda</td>      <!-- variable location -->
+                <td>Orlando</td>      <!-- variable location -->
                 <td>21000</td>    <!-- variable totalrevenue -->
             </tr>
             </tbody>
