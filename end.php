@@ -4,5 +4,6 @@ if (!isset($base)) {
     exit;
 }
 ?>
+</div>
 </body>
 </html>
