@@ -1,35 +1,50 @@
 <?php
 require 'base.php';
 require 'start.php';
+if (isset($_POST["name"])) {
+    $name = $_POST["name"];
+    $card_no = $_POST["card_no"];
+    $exp_date = $_POST["exp_date"];
+    $cvv = $_POST["cvv"];
+    $username = $_SESSION["username"];
+    try {
+        $sql = 'INSERT INTO payment VALUES (:card_no, :cvv, :exp_date, :name, :username)';
+        $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $st->execute(array(':card_no' => $card_no, ':cvv' => $cvv, ':exp_date' => $exp_date, ':name' => $name, ':username' => $username));
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    } catch (PDOException $ex) {
+        print $ex;
+    }
+}
 ?>
 <div class="row">
     <div class="col s6">
         <h2>Add Card</h2>
         <div class="row">
-            <form class="col s12">
+            <form class="col s12" method="post">
                 <div class="row">
                     <div class="input-field col s6">
-                        <input id="first_name" type="text" class="validate">
-                        <label for="first_name">Name on card</label>
+                        <input id="name" type="text" name="name" class="validate">
+                        <label for="name">Name on card</label>
                     </div>
                     <div class="input-field col s6">
-                        <input id="last_name" type="text" class="validate">
-                        <label for="last_name">Card Number</label>
+                        <input id="card_no" name="card_no" type="text" class="validate">
+                        <label for="card_no">Card Number</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input id="expiration_date" type="text" class="validate">
+                        <input id="expiration_date" name="exp_date" type="text" class="validate">
                         <label for="expiration_date">Expiration Date</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input id="password" type="password" class="validate">
-                        <label for="password">CVV</label>
+                        <input id="cvv" name="cvv" type="text" class="validate">
+                        <label for="cvv">CVV</label>
                     </div>
                 </div>
-                <a class="waves-effect waves-light btn">Save</a>
+                <button class="waves-effect waves-light btn">Save</button>
             </form>
         </div>
     </div>
