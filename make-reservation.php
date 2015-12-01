@@ -105,14 +105,33 @@ require 'start.php';
                         print "Bad date";
                         exit;
                     }
-                        $sql = "SELECT * FROM room WHERE location = :location AND NOT EXISTS (SELECT *
-FROM reservation_has_room
-WHERE room_no = num AND reservation_id NOT IN
-(SELECT reservation_id FROM reservation
-WHERE (DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date OR (DATE(start_date) <= :end_date AND DATE(end_date) >= :end_date))))";
+                        $sql = "SELECT
+                                    *
+                                FROM
+                                    room
+                                WHERE
+                                    location = :location
+                                        AND num NOT IN (SELECT
+                                            r.num
+                                        FROM
+                                            room AS r,
+                                            reservation AS rs,
+                                            reservation_has_room AS rhr
+                                        WHERE
+                                            r.num = rhr.room_no
+                                                AND rs.reservation_id = rhr.reservation_id
+                                                AND is_cancelled = 0
+                                                AND rhr.location = :location
+                                                AND ((DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date)
+                                                    OR (DATE(start_date) <= :end_date AND DATE(end_date) >= :end_date)
+                                                    OR (DATE(start_date) >= :start_date AND DATE(end_date) <= :end_date)))";
                         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-                        $st->execute(array(':location' => $location, ':start_date' => date("Y-m-d H:i:s",
-                            $start_date), ':end_date' => date("Y-m-d H:i:s", $end_date)));
+                        try {
+                            $st->execute(array(':location' => $location, ':start_date' => date("Y-m-d H:i:s",
+                                $start_date), ':end_date' => date("Y-m-d H:i:s", $end_date)));
+                        } catch (Exception $ex) {
+                            print $ex;
+                        }
                         $rows = $st->fetchAll();
                         $days = floor(($end_date - $start_date) / (60*60*24));
                         $_SESSION['days'] = $days;
