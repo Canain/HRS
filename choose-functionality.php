@@ -21,9 +21,9 @@ require 'start.php';
         <!--  SHOWN FOR MANAGEMENT  -->
         <?php if ($_SESSION["manager"]) : ?>
             <div class="collection">
-                <a href="#!" class="collection-item">View Reservation report</a>
-                <a href="#!" class="collection-item">View popular room category report</a>
-                <a href="#!" class="collection-item">View revenue report</a>
+                <a href="view-reservation-report.php" class="collection-item">View Reservation report</a>
+                <a href="view-popular-category.php" class="collection-item">View popular room category report</a>
+                <a href="view-revenue-report.php" class="collection-item">View revenue report</a>
             </div>
         <?php endif; ?>
     </div>
