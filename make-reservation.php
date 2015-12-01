@@ -22,16 +22,11 @@ require 'start.php';
                     $location = $_POST["location"];
                     $start_date = $_POST["start_date"];
                     $end_date = $_POST["end_date"];
-                        $sql = <<<SQL
-SELECT *
-FROM room
-WHERE location = 'Atlanta' AND
-NOT EXISTS (SELECT *
-              FROM reservation_has_room
-              WHERE room_no = num AND reservation_id NOT IN
-              (SELECT reservation_id FROM reservation
-              WHERE (DATE(start_date) > :start_date AND DATE(end_date) < :start_date OR (DATE(start_date) < :end_date AND DATE(end_date) > :end_date))))
-SQL;
+                        $sql = "SELECT * FROM room WHERE location = 'Atlanta' AND NOT EXISTS (SELECT *
+FROM reservation_has_room
+WHERE room_no = num AND reservation_id NOT IN
+(SELECT reservation_id FROM reservation
+WHERE (DATE(start_date) > :start_date AND DATE(end_date) < :start_date OR (DATE(start_date) < :end_date AND DATE(end_date) > :end_date))))";
                         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                         $st->execute(array(':start_date' => date("Y-m-d H:i:s", strtotime($start_date)), ':end_date' => date("Y-m-d H:i:s", strtotime($end_date))));
                         $rows = $st->fetchAll();
@@ -41,26 +36,23 @@ SQL;
                             $people = $row['people'];
                             $cost = $row['cost'];
                             $cost_extra_bed = $row['cost_extra_bed'];
-                            print <<<HTML
-<tr>
-    <td>${num}</td>          <!-- variable num -->
-    <td>${category}</td>     <!-- variable category -->
-    <td>${people}</td>            <!-- variable people -->
-    <td>${cost}</td>          <!-- variable cost -->
-    <td>${cost_extra_bed}</td>           <!-- variable cost_extra_bed -->
+                            print "<tr>
+    <td>{$num}</td>          <!-- variable num -->
+    <td>{$category}</td>     <!-- variable category -->
+    <td>{$people}</td>            <!-- variable people -->
+    <td>{$cost}</td>          <!-- variable cost -->
+    <td>{$cost_extra_bed}</td>           <!-- variable cost_extra_bed -->
     <td>
-        <input type="checkbox" class="filled-in" id="select-room-${num}" name="select-room-${num}"/>
-        <label for="select-room-${num}"></label>
+        <input type='checkbox' class='filled-in' id='select-room-{$num}' name='select-room-{$num}'/>
+        <label for='select-room-{$num}'></label>
     </td>
     <td>
-        <input type="checkbox" class="filled-in" id="select-extra-bed-${num}" name="select-room-${num}"/>
-        <label for="select-extra-bed-${num}"></label>
+        <input type='checkbox' class='filled-in' id='select-extra-bed-{$num}' name='select-room-{$num}'/>
+        <label for='select-extra-bed-{$num}'></label>
     </td>
-</tr>
-HTML;
+</tr>";
                         }
                 }
-
                 ?>
                 </tbody>
             </table>
@@ -106,17 +98,24 @@ HTML;
                         <select class="browser-default">
                             <option value="" disabled selected>Select a card</option>
                             <?php
-
+                                $sql = "SELECT card_no % 10000 as last, card_no FROM payment WHERE username = :username";
+                                $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                                $st->execute(array(':username' => $_SESSION['username']));
+                                $rows = $st->fetchAll();
+                                foreach ($rows as $row) {
+                                    $card_no = $row['card_no'];
+                                    $last = $row['last'];
+                                    print "<option value='{$card_no}'>*{$last}</option>";
+                                }
                             ?>
-                            <option value="1">2931</option> <!--last 4 digits of variable card_no-->
                         </select>
                     </div>
                     <div class="input-field col s6">
-                        <a href="#" class="waves-effect waves-light btn">Add card</a>
+                        <a href="payment-info.php" class="waves-effect waves-light btn">Add card</a>
                     </div>
                 </div>
             </div>
         </div>
-        <a class="waves-effect waves-light btn">Submit</a>
+        <button type="submit" class="waves-effect waves-light btn">Submit</button>
     </div>
 <?php require 'end.php';
