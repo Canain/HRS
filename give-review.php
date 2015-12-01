@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require 'base.php';
 if (isset($_POST["location-dropdown"]) && isset($_POST["rating-dropdown"]) && isset($_POST["comment"])) {
     $id = round(microtime(true) * 1000);
     $location = $_POST["location-dropdown"];
@@ -13,26 +13,8 @@ if (isset($_POST["location-dropdown"]) && isset($_POST["rating-dropdown"]) && is
 } else {
     print "Not all of the options are set";
 }
+require 'start.php';
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <!--Import Google Icon Font-->
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection"/>
-
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-</head>
-
-<body>
-<!--Import jQuery before materialize.js-->
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="js/materialize.min.js"></script>
-
-<!-- Dropdown Trigger -->
 <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Locations</a>
 
 <!-- Dropdown Structure -->
@@ -75,6 +57,4 @@ if (isset($_POST["location-dropdown"]) && isset($_POST["rating-dropdown"]) && is
         <a class="waves-effect waves-light btn">Submit</a>
     </form>
 </div>
-
-</body>
-</html>
+<?php require 'end.php';
