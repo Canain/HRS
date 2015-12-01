@@ -10,7 +10,7 @@ require 'start.php';
             <div class="collection">
                 <a href="make-reservation.php" class="collection-item">Make a new reservation</a>
                 <a href="update-reservation.php" class="collection-item">Update your reservation</a>
-                <a href="update-reservation.php" class="collection-item">Cancel reservation</a>
+                <a href="cancel-reservation.php" class="collection-item">Cancel reservation</a>
                 <a href="give-review.php" class="collection-item">Provide feedback</a>
                 <a href="view-review.php" class="collection-item">View feedback</a>
             </div>
