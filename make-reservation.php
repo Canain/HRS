@@ -75,6 +75,8 @@ WHERE (DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date OR (DAT
                             $people = $row['people'];
                             $cost = $row['cost'];
                             $cost_extra_bed = $row['cost_extra_bed'];
+                            $js1 = "if(this.checked)$(\"#total_cost\").text(parseInt($(\"#total_cost\").text())+{$cost}); else $(\"#total_cost\").text(parseInt($(\"#total_cost\").text())-{$cost});";
+                            $js2 = "if(this.checked)$(\"#total_cost\").text(parseInt($(\"#total_cost\").text())+{$cost_extra_bed}); else $(\"#total_cost\").text(parseInt($(\"#total_cost\").text())-{$cost_extra_bed});";
                             print "<tr>
     <td>{$num}</td>          <!-- variable num -->
     <td>{$category}</td>     <!-- variable category -->
@@ -82,11 +84,11 @@ WHERE (DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date OR (DAT
     <td>{$cost}</td>          <!-- variable cost -->
     <td>{$cost_extra_bed}</td>           <!-- variable cost_extra_bed -->
     <td>
-        <input type='checkbox' class='filled-in' id='select-room-{$num}' name='select-room-{$num}'/>
+        <input type='checkbox' class='filled-in' id='select-room-{$num}' name='select-room-{$num}' onchange='{$js1}'/>
         <label for='select-room-{$num}'></label>
     </td>
     <td>
-        <input type='checkbox' class='filled-in' id='select-extra-bed-{$num}' name='select-room-{$num}'/>
+        <input type='checkbox' class='filled-in' id='select-extra-bed-{$num}' name='select-room-{$num}' onchange='{$js2}'/>
         <label for='select-extra-bed-{$num}'></label>
     </td>
 </tr>";
@@ -96,9 +98,8 @@ WHERE (DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date OR (DAT
                 </tbody>
             </table>
             <div class="row">
-                <div class="input-field col s12">
-                    <input disabled id="total_cost" type="number" class="validate"/>
-                    <label for="total_cost">Total Cost</label>
+                <div class="col s12">
+                    Total Cost: <span id="total_cost">0</span>
                 </div>
             </div>
             <div class="row">
