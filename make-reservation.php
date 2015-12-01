@@ -25,6 +25,7 @@
                       <th data-field='costperday'>cost per day</th>
                       <th data-field='costextrabed'>cost of extra bed per day</th>
                       <th data-field='select'>Select Room</th>
+                      <th data-field="selectextrabed">Select Extra Bed</th>
                   <thead>
                 
                   <tbody>
@@ -36,43 +37,21 @@
                           <td>100</td>          <!-- variable cost -->
                           <td>70</td>           <!-- variable cost_extra_bed -->
                           <td>
-                              <input type="checkbox" class="filled-in" id="row1"/>
-                              <label for="row1"></label>
+                              <input type="checkbox" class="filled-in" id="select-room-1"/>
+                              <label for="select-room-1"></label>
+                          </td>
+                          <td>
+                              <input type="checkbox" class="filled-in" id="select-extra-bed-1"/>
+                              <label for="select-extra-bed-1"></label>
                           </td>
                       </tr>
                   </tbody>
               </table>
-              <a class="waves-effect waves-light btn">Check Details</a>
           </form>
       </div>
 
       <div id="confirm">
           <form>
-              <table class="striped">
-                  <thead>
-                      <th data-field='roomnum'>Room Number</th>
-                      <th data-field='category'>Room Category</th>
-                      <th data-field='numallowed'># persons allowed</th>
-                      <th data-field='costperday'>cost per day</th>
-                      <th data-field='costextrabed'>cost of extra bed per day</th>
-                      <th data-field='select'>Extra bed</th>
-                  <thead>
-                
-                  <tbody>
-                      <!--Example row with data from room table-->
-                      <tr>
-                          <td>111</td>          <!-- variable num -->
-                          <td>Standard</td>     <!-- variable category -->
-                          <td>2</td>            <!-- variable people -->
-                          <td>100</td>          <!-- variable cost -->
-                          <td>70</td>           <!-- variable cost_extra_bed -->
-                          <td>
-                              <input type="checkbox" class="filled-in" id="row2"/>
-                              <label for="row2"></label>
-                          </td>
-                      </tr>
-                  </tbody>
-              </table>
               <div class="row">
                   <div class="col s12">
                       <div class="row">
@@ -100,7 +79,7 @@
                             </select>
                           </div>
                           <div class="input-field col s6">
-                              <a href="#!">Add card</a>
+                              <a href="#" class="waves-effect waves-light btn">Add card</a>
                           </div>
                       </div>
                   </div>
