@@ -37,10 +37,14 @@ require 'start.php';
             $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             $st->execute(array(':location' => $location));
             $reviews = $st->fetchAll();
-            foreach ($reviews as $review) {
-                echo "<tr><td>" . $review['rating'] . "</td><td>" . $review['comment'] . "</td></tr>";
+            if (!$reviews) {
+                echo "No reviews for this location.";
+            } else {
+                foreach ($reviews as $review) {
+                    echo "<tr><td>" . $review['rating'] . "</td><td>" . $review['comment'] . "</td></tr>";
+                }
             }
-        } catch (PDOException $ex) {
+        } catch (Exception $ex) {
             print $ex;
         }
     } else {
