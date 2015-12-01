@@ -60,13 +60,14 @@ require 'start.php';
                         print "Bad date";
                         exit;
                     }
-                        $sql = "SELECT * FROM room WHERE location = 'Atlanta' AND NOT EXISTS (SELECT *
+                        $sql = "SELECT * FROM room WHERE location = :location AND NOT EXISTS (SELECT *
 FROM reservation_has_room
 WHERE room_no = num AND reservation_id NOT IN
 (SELECT reservation_id FROM reservation
 WHERE (DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date OR (DATE(start_date) <= :end_date AND DATE(end_date) >= :end_date))))";
                         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-                        $st->execute(array(':start_date' => date("Y-m-d H:i:s", $start_date), ':end_date' => date("Y-m-d H:i:s", $end_date)));
+                        $st->execute(array(':location' => $location, ':start_date' => date("Y-m-d H:i:s",
+                            $start_date), ':end_date' => date("Y-m-d H:i:s", $end_date)));
                         $rows = $st->fetchAll();
                         foreach ($rows as $row) {
                             $num = $row['num'];
