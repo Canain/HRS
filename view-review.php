@@ -1,73 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection"/>
 
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <!--Import Google Icon Font-->
-      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <!--Import materialize.css-->
-      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
 
-      <!--Let browser know website is optimized for mobile-->
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
+<body>
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
 
-    <body>
-      <!--Import jQuery before materialize.js-->
-      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-      <script type="text/javascript" src="js/materialize.min.js"></script>
+<h2>
+    Hotel Location
+</h2>
 
-      <h2>
-        Hotel Location
-      </h2>
+<form method="post">
+    <select name="location-dropdown" class="browser-default">
+        <option disabled selected value="">Location</option>
+        <option value="Atlanta">Atlanta</option>
+        <option value="Charlotte">Charlotte</option>
+        <option value="Savannah">Savannah</option>
+        <option value="Orlando">Orlando</option>
+        <option value="Miami">Miami</option>
+    </select>
 
-      <form method="post">
-        <select name="location-dropdown" class="browser-default">
-          <option disabled selected value="">Location</option>
-          <option value="Atlanta">Atlanta</option>
-          <option value="Charlotte">Charlotte</option>
-          <option value="Savannah">Savannah</option>
-          <option value="Orlando">Orlando</option>
-          <option value="Miami">Miami</option>
-        </select>
+    <p></p>
 
-        <p></p>
+    <button type="submit" class="waves-effect waves-light btn-large">Check Reviews</button>
+</form>
 
-        <button type="submit" class="waves-effect waves-light btn-large">Check Reviews</button>
-      </form>
+<table class="striped">
+    <thead>
+    <th data-field='rating'>Rating</th>
+    <th data-field='comment'>Comment</th>
+    <thead>
 
-      <table class="striped">
-        <thead>
-            <th data-field='rating'>Rating</th>
-            <th data-field='comment'>Comment</th>
-        <thead>
-      
-        <tbody>
-          <!--Example row with data from room table-->
-          <?php
-          require 'db.php';
-          if(isset($_POST["location-dropdown"])) {
-            $location = $_POST["location-dropdown"];
-            try {
-              $sql = 'SELECT rating, comment FROM review WHERE location = :location';
-              $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-              $st->execute(array(':location' => $location));
-              $reviews = $st->fetchAll();
-              foreach($reviews as $review) {
+    <tbody>
+    <!--Example row with data from room table-->
+    <?php
+    require 'db.php';
+    if (isset($_POST["location-dropdown"])) {
+        $location = $_POST["location-dropdown"];
+        try {
+            $sql = 'SELECT rating, comment FROM review WHERE location = :location';
+            $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $st->execute(array(':location' => $location));
+            $reviews = $st->fetchAll();
+            foreach ($reviews as $review) {
                 echo "<tr><td>" . $review['rating'] . "</td><td>" . $review['comment'] . "</td></tr>";
-              }
-            } catch(PDOException $ex) {
-              print $ex;
             }
-          } else {
-            echo "Location not set";
-          }
-          ?>
-          <tr>
-              <td>Rating</td>       <!-- variable rating -->
-              <td>Comment</td>      <!-- variable comment -->
-            </tr>
-        </tbody>
-      </table>
+        } catch (PDOException $ex) {
+            print $ex;
+        }
+    } else {
+        echo "Location not set";
+    }
+    ?>
+    <tr>
+        <td>Rating</td>       <!-- variable rating -->
+        <td>Comment</td>      <!-- variable comment -->
+    </tr>
+    </tbody>
+</table>
 
-    </body>
-  </html>
+</body>
+</html>
