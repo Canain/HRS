@@ -30,7 +30,6 @@ require 'start.php';
     <tbody>
     <!--Example row with data from room table-->
     <?php
-    require 'db.php';
     if (isset($_POST["location-dropdown"])) {
         $location = $_POST["location-dropdown"];
         try {

@@ -74,4 +74,4 @@ require 'start.php';
         <a class="waves-effect waves-light btn">Submit</a>
     </form>
 </div>
-<?php require 'end';
+<?php require 'end.php';
