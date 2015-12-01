@@ -14,3 +14,4 @@ if (!isset($base)) {
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
 </head>
 <body>
+<div class="container">
