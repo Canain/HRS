@@ -78,7 +78,7 @@ require 'start.php';
 
                 <tbody>
                 <?php
-                $sql = "SELECT reservation_id, num, extra_bed, cost, category, people, cost_extra_bed FROM reservation_has_room, room WHERE num = room_no AND reservation_id = :reservation_id";
+                $sql = "SELECT reservation_id, num, extra_bed, cost, category, people, cost_extra_bed FROM reservation_has_room, room WHERE is_cancelled = 0 AND num = room_no AND reservation_id = :reservation_id";
                 $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                 $st->execute(array(':reservation_id' => $reservation_id));
                 foreach ($st->fetchAll() as $row) {
