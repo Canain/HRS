@@ -28,7 +28,7 @@ require 'db.php';
                     <a href="update-reservation.php" class="collection-item">Update your reservation</a>
                     <a href="update-reservation.php" class="collection-item">Cancel reservation</a>
                     <a href="give-review.php" class="collection-item">Provide feedback</a>
-                    <a href="#" class="collection-item">View feedback</a>
+                    <a href="view-review.php" class="collection-item">View feedback</a>
                   </div>
             <?php endif; ?>
         </div>
