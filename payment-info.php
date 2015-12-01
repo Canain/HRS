@@ -11,7 +11,18 @@ if (isset($_POST["name"])) {
         $sql = 'INSERT INTO payment VALUES (:card_no, :cvv, :exp_date, :name, :username)';
         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $st->execute(array(':card_no' => $card_no, ':cvv' => $cvv, ':exp_date' => $exp_date, ':name' => $name, ':username' => $username));
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        header('Location: make-reservation.php');
+    } catch (PDOException $ex) {
+        print $ex;
+    }
+}
+if (isset($_POST['card_no_del'])) {
+    $card_no = $_POST['card_no_del'];
+    $username = $_SESSION['username'];
+    try {
+        $sql = 'delete from payment where card_no=:card_no and username=:username';
+        $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $st->execute(array(':card_no' => $card_no, ':username' => $username));
     } catch (PDOException $ex) {
         print $ex;
     }
@@ -54,7 +65,7 @@ if (isset($_POST["name"])) {
         <form method="post">
             <div class="row">
                 <div class="input-field col s12">
-                    <select class="browser-default">
+                    <select class="browser-default" name="card_no_del">
                         <option value="" disabled selected>Choose your option</option>
                         <?php
                         $sql = "SELECT card_no % 10000 as last, card_no FROM payment WHERE username = :username";
