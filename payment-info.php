@@ -39,14 +39,15 @@ require 'start.php';
     <div class="col s6">
         <h2>Delete Card</h2>
         <!-- Dropdown Trigger -->
-        <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Card Number</a>
-
-        <!-- Stored Credit card numbers go here -->
-        <ul id='dropdown1' class='dropdown-content'>
-            <li><a href="#!"><!-- VARIABLE: CARD NO1 -->8219</a></li>
-            <li><a href="#!"><!-- VARIABLE: CARD NO2 -->1234</a></li>
-            <li><a href="#!"><!-- VARIABLE: CARD NO3 -->4321</a></li>
-        </ul>
+        <div class="input-field col s12">
+            <select>
+                <option value="" disabled selected>Choose your option</option>
+                <option value="1"><!-- VARIABLE: CARD NO1 -->8219</option>
+                <option value="2"><!-- VARIABLE: CARD NO2 -->1234</option>
+                <option value="3"><!-- VARIABLE: CARD NO3 -->4321</option>
+            </select>
+            <label>Card Number</label>
+        </div>
     </div>
 </div>
 <?php require 'end.php';
