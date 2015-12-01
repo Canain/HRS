@@ -3,10 +3,8 @@ require 'base.php';
 require 'start.php';
 ?>
 <div class="row">
-
     <div class="col s6">
         <h2>Add Card</h2>
-
         <div class="row">
             <form class="col s12">
                 <div class="row">
