@@ -120,7 +120,7 @@ WHERE (DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date OR (DAT
                     </select>
                 </div>
                 <div class="input-field col s6">
-                    <a href="payment-info.php" class="waves-effect waves-light btn">Add card</a>
+                    <a href="payment-info.php" class="waves-effect waves-light btn">Manage Cards</a>
                 </div>
             </div>
             <button type="submit" class="waves-effect waves-light btn">Submit</button>
