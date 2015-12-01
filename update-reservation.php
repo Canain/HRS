@@ -18,6 +18,31 @@ if (isset($_POST['reservation_id'])) {
     $cur_start_date = $start_date;
     $cur_end_date = $end_date;
 }
+if (isset($_POST['new_start_date'])) {
+    $new_start_date = $_POST['new_start_date'];
+    $new_end_date = $_POST['new_end_date'];
+    $sql = "SELECT
+                *
+            FROM
+                room
+            WHERE
+
+                location = :location
+                    AND num NOT IN (SELECT
+                        r.num
+                    FROM
+                        room AS r,
+                        reservation AS rs,
+                        reservation_has_room AS rhr
+                    WHERE
+                        r.num = rhr.room_no
+                            AND rs.reservation_id = rhr.reservation_id
+                            AND is_cancelled = 0
+                            AND rhr.location = :location
+                            AND ((DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date)
+                                OR (DATE(start_date) <= :end_date AND DATE(end_date) >= :end_date)
+                                OR (DATE(start_date) >= :start_date AND DATE(end_date) <= :end_date)))";
+}
 require 'start.php';
 ?>
     <div id="reservation_search">
@@ -36,7 +61,7 @@ require 'start.php';
     </div>
 
     <div id="change_dates">
-        <form class="col s12">
+        <form method="post" class="col s12">
             <div class="row">
                 <div class="row">
                     <div class="input-field col s6">
@@ -48,11 +73,11 @@ require 'start.php';
                 </div>
                 <div class="row">
                     <div class="input-field col s6">
-                        <input id="new_start_date" type="text" class="validate">
+                        <input id="new_start_date" type="text" name="new_start_date" class="validate">
                         <label for="new_start_date">New start date</label>
                     </div>
                     <div class="input-field col s6">
-                        <input id="new_end_date" type="text" class="validate">
+                        <input id="new_end_date" type="text" name="new_end_date" class="validate">
                         <label for="new_end_date">New end date</label>
                     </div>
                 </div>
@@ -78,7 +103,7 @@ require 'start.php';
 
                 <tbody>
                 <?php
-                $sql = "SELECT reservation_id, num, extra_bed, cost, category, people, cost_extra_bed FROM reservation_has_room, room WHERE is_cancelled = 0 AND num = room_no AND reservation_id = :reservation_id";
+                $sql = "SELECT reservation_id, reservation_has_room.location as location, num, extra_bed, cost, category, people, cost_extra_bed FROM reservation_has_room, room WHERE num = room_no AND reservation_id = :reservation_id";
                 $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                 $st->execute(array(':reservation_id' => $reservation_id));
                 foreach ($st->fetchAll() as $row) {
@@ -87,6 +112,7 @@ require 'start.php';
                     $people = $row['people'];
                     $cost = $row['cost'];
                     $cost_extra_bed = $row['cost_extra_bed'];
+                    $_SESSION['location'] = $row['location'];
                     $extra_bed = $row['extra_bed'];
                     $checked = $extra_bed ? "checked='checked'" : "";
                     print "<tr>
