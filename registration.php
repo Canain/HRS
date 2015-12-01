@@ -1,19 +1,28 @@
 <?php
 require 'base.php';
-if (isset($_POST["username"])) {
+if (isset($_POST["username"]) && !empty($_POST["username"])
+    && isset($_POST["password"]) && !empty($_POST["password"])
+    && isset($_POST["confirm_password"]) && !empty($_POST["confirm_password"])
+    && isset($_POST["email"]) && !empty($_POST["email"])) {
     $username = $_POST["username"];
     $password = $_POST["password"];
     $confirm_password = $_POST["confirm_password"];
     $email = $_POST["email"];
-    try {
-        $sql = 'INSERT INTO customer VALUES (:username,:password,:email)';
-        $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $st->execute(array(':username' => $username, ':password' => $password, ':email' => $email));
-        header('Location: login.php');
-    } catch (PDOException $ex) {
-        print $ex;
+    if ($password != $confirm_password) {
+        echo "Passwords do not match";
+    } else {
+        try {
+            $sql = 'INSERT INTO customer VALUES (:username,:password,:email)';
+            $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $st->execute(array(':username' => $username, ':password' => $password, ':email' => $email));
+            header('Location: login.php');
+            exit;
+        } catch (PDOException $ex) {
+            print $ex;
+        }
     }
-    exit;
+} else {
+    echo "Not all fields are set.";
 }
 require 'start.php';
 ?>
