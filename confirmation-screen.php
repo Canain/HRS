@@ -19,4 +19,6 @@ try {
 }
 ?></h4>
 <h6>Please save this reservation id for all further communication</h6>
+<a href="choose-functionality.php" class="waves-effect waves-light btn">Home</a>
+
 <?php require 'end.php';

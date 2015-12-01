@@ -30,22 +30,24 @@ if (isset($_POST["username"])) {
 }
 require 'start.php';
 ?>
-<div class="row">
-    <form method="post" class="col s8">
-        <div class="row">
-            <div class="input-field col s8">
-                <input id="username" name="username" type="text" class="validate">
-                <label for="username">Username</label>
+<div style="display:flex;justify-content: center;align-items: center; position: relative;">
+    <div class="row">
+        <form method="post" class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="username" name="username" type="text" class="validate">
+                    <label for="username">Username</label>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s8">
-                <input id="password" name="password" type="password" class="validate">
-                <label for="password">Password</label>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="password" name="password" type="password" class="validate">
+                    <label for="password">Password</label>
+                </div>
             </div>
-        </div>
-        <button type="submit" class="waves-effect waves-light btn">Login</button>
-        <a href="registration.php" class="waves-effect waves-light btn">New User</a>
-    </form>
+            <button type="submit" class="waves-effect waves-light btn">Login</button>
+            <a href="registration.php" class="waves-effect waves-light btn">New User</a>
+        </form>
+    </div>
 </div>
 <?php require 'end.php';
