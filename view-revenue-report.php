@@ -69,7 +69,6 @@ require 'start.php';
                 foreach ($months as $month) {
                     if (isset($_POST[$month])) {
                         $month_name = $month;
-                        echo $month_name;
                         try {
                             $sql = 'select monthname(start_date) as month, location, sum(total_cost) as total_revenue
                                 from reservation natural join reservation_has_room
