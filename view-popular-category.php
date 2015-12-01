@@ -14,12 +14,26 @@ require 'start.php';
 
             <tbody>
             <!--Example row with data from room table-->
-            <tr>
-                <td>August</td>       <!-- variable month -->
-                <td>Family</td>       <!-- variable top-room-category -->
-                <td>Charlotte</td>    <!-- variable location -->
-                <td>45</td>            <!-- variable num-res-category -->
-            </tr>
+            <?php
+            try {
+                $sql = 'select monthname(start_date) as month, category, location, max(reservation_id) as num_reservations
+                from reservation natural join reservation_has_room natural join room
+                group by month, location
+                order by month, location';
+                $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                $st->execute();
+                $rows = $st->fetchAll();
+                foreach ($rows as $row) {
+                    $num_reservations = $row['num_reservations'];
+                    $location = $row['location'];
+                    $month = $row['month'];
+                    $category = $row['category'];
+                    print "<tr> <td>$month</td> <td>$category</td> </td><td>$location</td> <td>$num_reservations</td></tr>";
+                }
+            } catch (PDOException $ex) {
+                print $ex;
+            }
+            ?>
             </tbody>
         </table>
     </form>
