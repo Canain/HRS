@@ -13,11 +13,26 @@ require 'start.php';
 
             <tbody>
             <!--Example row with data from room table-->
-            <tr>
-                <td>August</td>       <!-- variable month -->
-                <td>Atlanta</td>      <!-- variable location -->
-                <td>2</td>            <!-- variable numreservations -->
-            </tr>
+
+            <?php
+            try {
+                $sql = 'select monthname(start_date) as month, location, count(reservation_id) as num_reservations
+                from reservation natural join reservation_has_room
+                group by month, location
+                order by month, location';
+                $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                $st->execute();
+                $rows = $st->fetchAll();
+                foreach ($rows as $row) {
+                    $num_reservations = $row['num_reservations'];
+                    $location = $row['location'];
+                    $month = $row['month'];
+                    print "<tr> <td>$month</td> <td>$location</td> <td>$num_reservations</td></tr>";
+                }
+            } catch (PDOException $ex) {
+                print $ex;
+            }
+            ?>
             </tbody>
         </table>
     </form>

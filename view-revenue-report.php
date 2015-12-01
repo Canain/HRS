@@ -1,19 +1,6 @@
 <?php
 require 'base.php';
 require 'start.php';
-try {
-    $sql = 'select monthname(start_date) as month, location, sum(total_cost) as total_revenue
-            from reservation natural join reservation_has_room
-            group by month, location
-            order by month, location';
-    $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-    $st->execute();
-    $total_revenue = $st->fetch()['total_revenue'];
-    $location = $st->fetch()['location'];
-    $month = $st->fetch()['month'];
-} catch (PDOException $ex) {
-    print $ex;
-}
 ?>
 <div id="selectrooms">
     <form>
