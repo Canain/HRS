@@ -2,6 +2,39 @@
 require 'base.php';
 require 'start.php';
 ?>
+
+    <div id="confirm">
+        <div class="row">
+            <div class="col s12">
+                <div class="row">
+                    <form method="post">
+                        <div class="input-field col s6">
+                            <input type="date" id="start_date" name="start_date" class="validate"/>
+                            <label for="start_date"></label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input type="date" id="end_date" name="end_date" class="validate"/>
+                            <label for="end_date"></label>
+                        </div>
+                        <div class="input-field col s6">
+                            <select name="location" class="browser-default">
+                                <option value="" disabled selected>Select a Location</option>
+                                <option value="Atlanta">Atlanta</option>
+                                <option value="Charlotte">Charlotte</option>
+                                <option value="Savannah">Savannah</option>
+                                <option value="Orlando">Orlando</option>
+                                <option value="Miami">Miami</option>
+                            </select>
+                        </div>
+                        <div class="col s6">
+                            <button type="submit" class="waves-effect waves-light btn">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="selectrooms">
         <form>
             <table class="striped">
@@ -56,66 +89,35 @@ WHERE (DATE(start_date) > :start_date AND DATE(end_date) < :start_date OR (DATE(
                 ?>
                 </tbody>
             </table>
-        </form>
-    </div>
-    <div id="confirm">
-        <div class="row">
-            <div class="col s12">
-                <div class="row">
-                    <form method="post">
-                        <div class="input-field col s6">
-                            <input type="date" id="start_date" name="start_date" class="validate"/>
-                            <label for="start_date"></label>
-                        </div>
-                        <div class="input-field col s6">
-                            <input type="date" id="end_date" name="end_date" class="validate"/>
-                            <label for="end_date"></label>
-                        </div>
-                        <div class="input-field col s6">
-                            <select name="location" class="browser-default">
-                                <option value="" disabled selected>Select a Location</option>
-                                <option value="Atlanta">Atlanta</option>
-                                <option value="Charlotte">Charlotte</option>
-                                <option value="Savannah">Savannah</option>
-                                <option value="Orlando">Orlando</option>
-                                <option value="Miami">Miami</option>
-                            </select>
-                        </div>
-                        <div class="col s6">
-                            <button type="submit" class="waves-effect waves-light btn">Search</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input disabled id="total_cost" type="number" class="validate"/>
-                        <label for="total_cost">Total Cost</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s6">
-                        <!-- fill with payement options -->
-                        <select class="browser-default">
-                            <option value="" disabled selected>Select a card</option>
-                            <?php
-                                $sql = "SELECT card_no % 10000 as last, card_no FROM payment WHERE username = :username";
-                                $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-                                $st->execute(array(':username' => $_SESSION['username']));
-                                $rows = $st->fetchAll();
-                                foreach ($rows as $row) {
-                                    $card_no = $row['card_no'];
-                                    $last = $row['last'];
-                                    print "<option value='{$card_no}'>*{$last}</option>";
-                                }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="input-field col s6">
-                        <a href="payment-info.php" class="waves-effect waves-light btn">Add card</a>
-                    </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input disabled id="total_cost" type="number" class="validate"/>
+                    <label for="total_cost">Total Cost</label>
                 </div>
             </div>
-        </div>
-        <button type="submit" class="waves-effect waves-light btn">Submit</button>
+            <div class="row">
+                <div class="input-field col s6">
+                    <!-- fill with payement options -->
+                    <select class="browser-default">
+                        <option value="" disabled selected>Select a card</option>
+                        <?php
+                        $sql = "SELECT card_no % 10000 as last, card_no FROM payment WHERE username = :username";
+                        $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                        $st->execute(array(':username' => $_SESSION['username']));
+                        $rows = $st->fetchAll();
+                        foreach ($rows as $row) {
+                            $card_no = $row['card_no'];
+                            $last = $row['last'];
+                            print "<option value='{$card_no}'>*{$last}</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="input-field col s6">
+                    <a href="payment-info.php" class="waves-effect waves-light btn">Add card</a>
+                </div>
+            </div>
+            <button type="submit" class="waves-effect waves-light btn">Submit</button>
+        </form>
     </div>
 <?php require 'end.php';
