@@ -124,3 +124,10 @@ FROM DUAL;
 
 --Update Reservation
 UPDATE reservation SET start_date = :new_start_date, end_date = :new_end_date WHERE reservation_id = :reservation_id;
+
+--Get expiration from card number
+SELECT p.exp_date as exp_date FROM payment AS p WHERE  p.card_no = :card_no;
+
+--Get expiration from reservation id
+SELECT p.exp_date as exp_date FROM reservation AS r, payment AS p WHERE r.card_no = p.card_no AND r.reservation_id = :reservation_id;
+
