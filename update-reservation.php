@@ -3,8 +3,7 @@ require 'base.php';
 if (isset($_POST['reservation_id'])) {
     $reservation_id = $_POST['reservation_id'];
     $username = $_SESSION['username'];
-    $_SESSION['reservation_id'] = $reservation_id;
-    $sql = "SELECT * FROM reservation WHERE reservation_id = :reservation_id AND username = :username";
+    $sql = "SELECT * FROM reservation WHERE reservation_id = :reservation_id AND username = :username AND is_cancelled = 0";
     $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
     $st->execute(array(':reservation_id' => $reservation_id, ':username' => $username));
     $row = $st->fetch();
@@ -70,6 +69,18 @@ FROM DUAL";
         exit;
     }
 }
+if (isset($_POST['update'])) {
+    if (isset($_SESSION['update']) && $_SESSION['update']) {
+        $new_start_date = $_SESSION['new_start_date'];
+        $new_end_date = $_SESSION['new_end_date'];
+        $reservation_id = $_SESSION['reservation_id'];
+        $sql = "UPDATE reservation SET start_date = :new_start_date, end_date = :new_end_date WHERE reservation_id = :reservation_id";
+        $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $st->execute(array(':new_start_date' => $new_start_date, ':new_end_date' => $new_end_date, ':reservation_id' => $reservation_id));
+        header('Location: choose-functionality.php');
+        exit;
+    }
+}
 require 'start.php';
 ?>
     <div id="reservation_search">
@@ -117,7 +128,7 @@ require 'start.php';
     <div id="confirm_changes">
         <h6>Rooms are available. Please confirm details below before submitting.</h6>
 
-        <form>
+        <form method="post">
             <table class="striped">
                 <thead>
                 <th data-field='roomnum'>Room Number</th>
@@ -168,7 +179,8 @@ require 'start.php';
                     </div>
                 </div>
             </div>
-            <a class="waves-effect waves-light btn">Submit</a>
+            <input type="hidden" name="update" value="true">
+            <button type="submit" class="waves-effect waves-light btn">Submit</button>
         </form>
     </div>
 <?php require 'end.php';

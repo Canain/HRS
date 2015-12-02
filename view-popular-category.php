@@ -71,16 +71,19 @@ require 'start.php';
                 if (isset($_POST[$month])) {
                     $month_name = $month;
                     try {
-                        $sql = 'SELECT monthname(start_date) AS month, category, location, max(reservation_id) AS num_reservations
-                        FROM reservation NATURAL JOIN reservation_has_room NATURAL JOIN room
-                        where monthname(start_date)=:month_name
-                        GROUP BY month, location
-                        ORDER BY month, location';
+                        $sql = 'SELECT month, category, location, max(num_reservations) as res
+                            FROM
+                            (SELECT monthname(start_date) AS month, category, location, count(reservation_id) AS num_reservations
+                             FROM reservation NATURAL JOIN reservation_has_room NATURAL JOIN room
+                             WHERE monthname(start_date)=:month_name
+                             GROUP BY category, location
+                             ORDER BY location) AS s
+                             GROUP BY location';
                         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                         $st->execute(array(':month_name' => $month_name));
                         $rows = $st->fetchAll();
                         foreach ($rows as $row) {
-                            $num_reservations = $row['num_reservations'];
+                            $num_reservations = $row['res'];
                             $location = $row['location'];
                             $month = $row['month'];
                             $category = $row['category'];
