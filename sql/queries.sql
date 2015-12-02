@@ -122,3 +122,6 @@ SELECT
    WHERE
      reservation_id = :reservation_id)
 FROM DUAL;
+
+--Update Reservation
+UPDATE reservation SET start_date = :new_start_date, end_date = :new_end_date WHERE reservation_id = :reservation_id;
