@@ -33,6 +33,22 @@ if (isset($_POST['new_start_date']) && !empty($_POST['new_start_date'])
         $_SESSION['update'] = false;
         exit;
     }
+
+    $sql = "SELECT p.exp_date as exp_date FROM reservation AS r, payment AS p WHERE r.card_no = p.card_no AND r.reservation_id = :reservation_id";
+    $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $st->execute(array(':reservation_id' => $reservation_id));
+    $row = $st->fetch();
+    if (!$row) {
+        print "Reservation not found";
+        $_SESSION['update'] = false;
+        exit;
+    }
+    $exp_date = strtotime($row['exp_date']);
+    if ($new_end_date > $exp_date) {
+        print "New reservation dates are past card expiration date";
+        exit;
+    }
+
     $sql = "SELECT
     (SELECT
             COUNT(*)
