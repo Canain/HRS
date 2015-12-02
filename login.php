@@ -32,6 +32,7 @@ require 'start.php';
 ?>
 <div style="display:flex;justify-content: center;align-items: center; position: relative;">
     <div class="row">
+        <h2 align="center">HRS</h2>
         <form method="post" class="col s12">
             <div class="row">
                 <div class="input-field col s12">

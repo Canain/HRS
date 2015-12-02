@@ -28,6 +28,7 @@ require 'start.php';
 ?>
 <div style="display:flex;justify-content: center;align-items: center; position: relative;">
     <div class="row">
+        <h2 align="center">New User</h2>
         <form class="col s12" method="post">
             <div class="row">
                 <div class="input-field col s12">
