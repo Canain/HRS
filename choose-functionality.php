@@ -4,6 +4,7 @@ require 'start.php';
 ?>
 <div style="display:flex;justify-content: center;align-items: center; position: relative;">
     <div class="row">
+        <h2 align="center">Choose Option</h2>
         <div class="col s12">
             <!--  SHOWN FOR CUSTOMER  -->
             <?php if (!$_SESSION["manager"]) : ?>
