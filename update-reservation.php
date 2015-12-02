@@ -3,6 +3,7 @@ require 'base.php';
 if (isset($_POST['reservation_id'])) {
     $reservation_id = $_POST['reservation_id'];
     $username = $_SESSION['username'];
+    $_SESSION['reservation_id'] = $reservation_id;
     $sql = "SELECT * FROM reservation WHERE reservation_id = :reservation_id AND username = :username";
     $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
     $st->execute(array(':reservation_id' => $reservation_id, ':username' => $username));
@@ -19,29 +20,55 @@ if (isset($_POST['reservation_id'])) {
     $cur_end_date = $end_date;
 }
 if (isset($_POST['new_start_date'])) {
-    $new_start_date = $_POST['new_start_date'];
-    $new_end_date = $_POST['new_end_date'];
+    $new_start_date = strtotime($_POST['new_start_date']);
+    $new_end_date = strtotime($_POST['new_end_date']);
     $sql = "SELECT
-                *
-            FROM
-                room
-            WHERE
-
-                location = :location
-                    AND num NOT IN (SELECT
-                        r.num
-                    FROM
-                        room AS r,
-                        reservation AS rs,
-                        reservation_has_room AS rhr
-                    WHERE
-                        r.num = rhr.room_no
-                            AND rs.reservation_id = rhr.reservation_id
-                            AND is_cancelled = 0
-                            AND rhr.location = :location
-                            AND ((DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date)
-                                OR (DATE(start_date) <= :end_date AND DATE(end_date) >= :end_date)
-                                OR (DATE(start_date) >= :start_date AND DATE(end_date) <= :end_date)))";
+    (SELECT
+            COUNT(*)
+        FROM
+            room AS ro,
+            reservation_has_room AS hr
+        WHERE
+            hr.location = :location
+                AND ro.num = hr.room_no
+                AND hr.reservation_id = :reservation_id
+                AND num NOT IN (SELECT
+                    r.num
+                FROM
+                    room AS r,
+                    reservation AS rs,
+                    reservation_has_room AS rhr
+                WHERE
+                    r.num = rhr.room_no
+                        AND rhr.location = :location
+                        AND rs.reservation_id != :reservation_id
+                        AND rs.reservation_id = rhr.reservation_id
+                        AND is_cancelled = 0
+                        AND ((DATE(start_date) >= :new_start_date
+                        AND DATE(end_date) <= :new_start_date)
+                        OR (DATE(start_date) <= :new_end_date
+                        AND DATE(end_date) >= :new_end_date)
+                        OR (DATE(start_date) >= :new_start_date
+                        AND DATE(end_date) <= :new_end_date)))) -
+		(SELECT
+            COUNT(*)
+        FROM
+            reservation_has_room
+        WHERE
+            reservation_id = :reservation_id)
+FROM DUAL";
+    $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    try {
+        $st->execute(array(':reservation_id' => $_SESSION['reservation_id'], ':location' => $_SESSION['location'], ':new_start_date' => date("Y-m-d H:i:s",
+            $new_start_date), ':new_end_date' => date("Y-m-d H:i:s", $new_end_date)));
+    } catch (Exception $ex) {
+        print $ex;
+    }
+    $row = $st->fetch();
+    if ($row[0] != 0) {
+        print 'Some rooms are not available for that time';
+        exit;
+    }
 }
 require 'start.php';
 ?>
