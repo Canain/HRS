@@ -19,10 +19,15 @@ if (isset($_POST['make'])) {
     $start_date = $_SESSION['start_date'];
     $end_date = $_SESSION['end_date'];
     $username = $_SESSION['username'];
-    $card_no = $_POST['card_no'];
+    $card_no = str_split(".", $_POST['card_no'])[0];
+    $exp_date = str_split(".", $_POST['card_no'])[1];
     $days = $_SESSION['days'];
     $total_cost = 0;
     $location = $_SESSION['location'];
+    if ($exp_date < $end_date) {
+        print 'Card expires before reservation ends';
+        exit;
+    }
     foreach ($reservations as $num => $extra) {
         $total_cost += $_SESSION['room-' . $num . '-cost'] * $days;
         if ($extra) {
@@ -39,8 +44,8 @@ if (isset($_POST['make'])) {
         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $st->execute(array(':reservation_id' => $reservation_id, ':location' => $location, ':room_no' => $room_no, ':extra_bed' => $extra_bed));
     }
-    header('Location: confirmation-screen.php');
-    exit;
+//    header('Location: confirmation-screen.php');
+//    exit;
 }
 require 'start.php';
 ?>
@@ -181,14 +186,15 @@ require 'start.php';
                     <select name="card_no" class="browser-default">
                         <option value="" disabled selected>Select a card</option>
                         <?php
-                        $sql = "SELECT card_no % 10000 as last, card_no FROM payment WHERE username = :username";
+                        $sql = "SELECT card_no % 10000 as last, card_no, exp_date FROM payment WHERE username = :username";
                         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                         $st->execute(array(':username' => $_SESSION['username']));
                         $rows = $st->fetchAll();
                         foreach ($rows as $row) {
                             $card_no = $row['card_no'];
+                            $exp_date = $row['exp_date'];
                             $last = $row['last'];
-                            print "<option value='{$card_no}'>*{$last}</option>";
+                            print "<option value='{$card_no}.{$exp_date}'>*{$last}</option>";
                         }
                         ?>
                     </select>
