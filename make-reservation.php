@@ -21,13 +21,23 @@ if (isset($_POST['make'])) {
     $start_date = $_SESSION['start_date'];
     $end_date = $_SESSION['end_date'];
     $username = $_SESSION['username'];
-    $card_no = str_split(".", $_POST['card_no'])[0];
-    $exp_date = str_split(".", $_POST['card_no'])[1];
+    $card_no = $_POST['card_no'];
     $days = $_SESSION['days'];
     $total_cost = 0;
     $location = $_SESSION['location'];
-    if ($exp_date < $end_date) {
-        print 'Card expires before reservation ends';
+
+    $sql = "SELECT p.exp_date as exp_date FROM payment AS p WHERE  p.card_no = :card_no";
+    $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $st->execute(array('$card_no' => $card_no));
+    $row = $st->fetch();
+    if (!$row) {
+        print "Reservation not found";
+        $_SESSION['update'] = false;
+        exit;
+    }
+    $exp_date = strtotime($row['exp_date']);
+    if ($end_date > $exp_date) {
+        print "New reservation dates are past card expiration date";
         exit;
     }
     foreach ($reservations as $num => $extra) {
@@ -190,15 +200,14 @@ require 'start.php';
                     <select name="card_no" class="browser-default">
                         <option value="" disabled selected>Select a card</option>
                         <?php
-                        $sql = "SELECT card_no % 10000 AS last, card_no, exp_date FROM payment WHERE username = :username";
+                        $sql = "SELECT card_no % 10000 AS last, card_no FROM payment WHERE username = :username";
                         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                         $st->execute(array(':username' => $_SESSION['username']));
                         $rows = $st->fetchAll();
                         foreach ($rows as $row) {
                             $card_no = $row['card_no'];
-                            $exp_date = strtotime($row['exp_date']);
                             $last = $row['last'];
-                            print "<option value='{$card_no}.{$exp_date}'>*{$last}</option>";
+                            print "<option value='{$card_no}'>*{$last}</option>";
                         }
                         ?>
                     </select>
