@@ -44,8 +44,8 @@ if (isset($_POST['make'])) {
         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $st->execute(array(':reservation_id' => $reservation_id, ':location' => $location, ':room_no' => $room_no, ':extra_bed' => $extra_bed));
     }
-//    header('Location: confirmation-screen.php');
-//    exit;
+    header('Location: confirmation-screen.php');
+    exit;
 }
 require 'start.php';
 ?>
