@@ -1,9 +1,11 @@
 <?php
 require 'base.php';
-function startsWith($haystack, $needle) {
+function startsWith($haystack, $needle)
+{
     $length = strlen($needle);
     return (substr($haystack, 0, $length) === $needle);
 }
+
 if (isset($_POST['make'])) {
     $reservations = array();
     foreach ($_POST as $field => $value) {
@@ -34,7 +36,7 @@ if (isset($_POST['make'])) {
             $total_cost += $_SESSION['room-' . $num . '-cost-extra-bed'] * $days;
         }
     }
-    $sql = "INSERT INTO reservation VALUES (DEFAULT, :start_date, :end_date, false, :total_cost, :card_no, :username)";
+    $sql = "INSERT INTO reservation VALUES (DEFAULT, :start_date, :end_date, FALSE, :total_cost, :card_no, :username)";
     $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
     $st->execute(array(':start_date' => date("Y-m-d H:i:s", $start_date), ':end_date' => date("Y-m-d H:i:s", $end_date),
         ':total_cost' => $total_cost, ':card_no' => $card_no, ':username' => $username));
@@ -52,6 +54,7 @@ require 'start.php';
 
     <div id="confirm">
         <h2>Make a Reservation</h2>
+
         <div class="row">
             <div class="col s12">
                 <div class="row">
@@ -107,11 +110,12 @@ require 'start.php';
                     $_SESSION['start_date'] = $start_date;
                     $_SESSION['end_date'] = $end_date;
                     if (!$start_date || !$end_date
-                        || $start_date - time() < 0 || $end_date - $start_date < 0) {
+                        || $start_date - time() < 0 || $end_date - $start_date < 0
+                    ) {
                         print "Bad date";
                         exit;
                     }
-                        $sql = "SELECT
+                    $sql = "SELECT
                                     *
                                 FROM
                                     room
@@ -131,30 +135,30 @@ require 'start.php';
                                                 AND ((DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date)
                                                     OR (DATE(start_date) <= :end_date AND DATE(end_date) >= :end_date)
                                                     OR (DATE(start_date) >= :start_date AND DATE(end_date) <= :end_date)))";
-                        $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-                        try {
-                            $st->execute(array(':location' => $location, ':start_date' => date("Y-m-d H:i:s",
-                                $start_date), ':end_date' => date("Y-m-d H:i:s", $end_date)));
-                        } catch (Exception $ex) {
-                            print $ex;
-                        }
-                        $rows = $st->fetchAll();
-                        $days = floor(($end_date - $start_date) / (60*60*24));
-                        $_SESSION['days'] = $days;
-                        foreach ($rows as $row) {
-                            $num = $row['num'];
-                            $category = $row['category'];
-                            $people = $row['people'];
-                            $cost = $row['cost'];
-                            $cost_extra_bed = $row['cost_extra_bed'];
-                            $_SESSION['room-' . $num . '-cost'] = $cost;
-                            $_SESSION['room-' . $num . '-cost-extra-bed'] = $cost_extra_bed;
-                            $js1cost = $cost * $days;
-                            $js2cost = $cost_extra_bed * $days;
-                            // Calculate number of days and then figure out cost for js
-                            $js1 = "if(this.checked)$(\"#total_cost\").text(parseInt($(\"#total_cost\").text())+{$js1cost}); else $(\"#total_cost\").text(parseInt($(\"#total_cost\").text())-{$js1cost});";
-                            $js2 = "if(this.checked)$(\"#total_cost\").text(parseInt($(\"#total_cost\").text())+{$js2cost}); else $(\"#total_cost\").text(parseInt($(\"#total_cost\").text())-{$js2cost});";
-                            print "<tr>
+                    $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                    try {
+                        $st->execute(array(':location' => $location, ':start_date' => date("Y-m-d H:i:s",
+                            $start_date), ':end_date' => date("Y-m-d H:i:s", $end_date)));
+                    } catch (Exception $ex) {
+                        print $ex;
+                    }
+                    $rows = $st->fetchAll();
+                    $days = floor(($end_date - $start_date) / (60 * 60 * 24));
+                    $_SESSION['days'] = $days;
+                    foreach ($rows as $row) {
+                        $num = $row['num'];
+                        $category = $row['category'];
+                        $people = $row['people'];
+                        $cost = $row['cost'];
+                        $cost_extra_bed = $row['cost_extra_bed'];
+                        $_SESSION['room-' . $num . '-cost'] = $cost;
+                        $_SESSION['room-' . $num . '-cost-extra-bed'] = $cost_extra_bed;
+                        $js1cost = $cost * $days;
+                        $js2cost = $cost_extra_bed * $days;
+                        // Calculate number of days and then figure out cost for js
+                        $js1 = "if(this.checked)$(\"#total_cost\").text(parseInt($(\"#total_cost\").text())+{$js1cost}); else $(\"#total_cost\").text(parseInt($(\"#total_cost\").text())-{$js1cost});";
+                        $js2 = "if(this.checked)$(\"#total_cost\").text(parseInt($(\"#total_cost\").text())+{$js2cost}); else $(\"#total_cost\").text(parseInt($(\"#total_cost\").text())-{$js2cost});";
+                        print "<tr>
     <td>{$num}</td>          <!-- variable num -->
     <td>{$category}</td>     <!-- variable category -->
     <td>{$people}</td>            <!-- variable people -->
@@ -170,7 +174,7 @@ require 'start.php';
         <label for='select-extra-bed-{$num}'></label>
     </td>
 </tr>";
-                        }
+                    }
                 }
                 ?>
                 </tbody>
@@ -186,7 +190,7 @@ require 'start.php';
                     <select name="card_no" class="browser-default">
                         <option value="" disabled selected>Select a card</option>
                         <?php
-                        $sql = "SELECT card_no % 10000 as last, card_no, exp_date FROM payment WHERE username = :username";
+                        $sql = "SELECT card_no % 10000 AS last, card_no, exp_date FROM payment WHERE username = :username";
                         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                         $st->execute(array(':username' => $_SESSION['username']));
                         $rows = $st->fetchAll();
