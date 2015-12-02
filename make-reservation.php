@@ -192,7 +192,7 @@ require 'start.php';
                         $rows = $st->fetchAll();
                         foreach ($rows as $row) {
                             $card_no = $row['card_no'];
-                            $exp_date = $row['exp_date'];
+                            $exp_date = strtotime($row['exp_date']);
                             $last = $row['last'];
                             print "<option value='{$card_no}.{$exp_date}'>*{$last}</option>";
                         }
