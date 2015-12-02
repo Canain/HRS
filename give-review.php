@@ -10,6 +10,7 @@ if (isset($_POST["location-dropdown"]) && isset($_POST["rating-dropdown"]) && is
         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $st->execute(array(':location' => $location, ':rating' => $rating,
             ':comment' => $comment, ':username' => $username));
+        header('Location: choose-functionality.php');
         exit;
     } catch (PDOException $ex) {
         print $ex;
