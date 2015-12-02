@@ -27,6 +27,9 @@ order by location;
 --Write Review
 INSERT INTO review VALUES (DEFAULT, :location, :rating, :comment, :username);
 
+--View Review
+SELECT rating, comment FROM review WHERE location = :location;
+
 --Insert Card
 INSERT INTO payment VALUES (:card_no, :cvv, :exp_date, :name, :username);
 --Delete Card
@@ -51,5 +54,71 @@ SELECT total_cost, is_cancelled FROM reservation WHERE reservation_id = :id;
             WHEN datediff(start_date, current_date()) > 1 THEN total_cost / 5
             ELSE total_cost END WHERE reservation_id = :id AND is_cancelled = 0;
 
-SELECT total_cost FROM reservation WHERE reservation_id = :id AND is_cancelled = 1
+SELECT total_cost FROM reservation WHERE reservation_id = :id AND is_cancelled = 1;
 
+--Search Rooms
+SELECT
+  *
+FROM
+  room
+WHERE
+  location = :location
+  AND num NOT IN (SELECT
+                    r.num
+                  FROM
+                    room AS r,
+                    reservation AS rs,
+                    reservation_has_room AS rhr
+                  WHERE
+                    r.num = rhr.room_no
+                    AND rs.reservation_id = rhr.reservation_id
+                    AND is_cancelled = 0
+                    AND rhr.location = :location
+                    AND ((DATE(start_date) >= :start_date AND DATE(end_date) <= :start_date)
+                         OR (DATE(start_date) <= :end_date AND DATE(end_date) >= :end_date)
+                         OR (DATE(start_date) >= :start_date AND DATE(end_date) <= :end_date)));
+
+--Make Reservation
+INSERT INTO reservation VALUES (DEFAULT, :start_date, :end_date, false, :total_cost, :card_no, :username);
+INSERT INTO reservation_has_room VALUES (:reservation_id, :location, :room_no, :extra_bed);
+
+--Find Reservation
+SELECT * FROM reservation WHERE reservation_id = :reservation_id AND username = :username AND is_cancelled = 0;
+
+--Find Rooms For Reservation
+SELECT reservation_id, reservation_has_room.location as location, num, extra_bed, cost, category, people, cost_extra_bed
+FROM reservation_has_room, room WHERE num = room_no AND reservation_id = :reservation_id;
+
+--Search Room Update Availability
+SELECT
+  (SELECT
+     COUNT(*)
+   FROM
+     room AS ro,
+     reservation_has_room AS hr
+   WHERE
+     hr.location = :location
+     AND ro.num = hr.room_no
+     AND hr.reservation_id = :reservation_id
+     AND num NOT IN (SELECT
+                       r.num
+                     FROM
+                       room AS r,
+                       reservation AS rs,
+                       reservation_has_room AS rhr
+                     WHERE
+                       r.num = rhr.room_no
+                       AND rhr.location = :location
+                       AND rs.reservation_id != :reservation_id
+                       AND rs.reservation_id = rhr.reservation_id
+                       AND is_cancelled = 0
+                       AND ((DATE(start_date) <= :new_start_date AND DATE(end_date) >= :new_start_date)
+                            OR (DATE(start_date) <= :new_end_date AND DATE(end_date) >= :new_end_date)
+                            OR (DATE(start_date) >= :new_start_date AND DATE(end_date) <= :new_end_date)))) -
+  (SELECT
+     COUNT(*)
+   FROM
+     reservation_has_room
+   WHERE
+     reservation_id = :reservation_id)
+FROM DUAL;
