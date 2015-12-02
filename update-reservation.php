@@ -82,12 +82,13 @@ FROM DUAL";
 }
 if (isset($_POST['update'])) {
     if (isset($_SESSION['update']) && $_SESSION['update']) {
+//        var_dump($_SESSION);
         $new_start_date = $_SESSION['new_start_date'];
         $new_end_date = $_SESSION['new_end_date'];
         $reservation_id = $_SESSION['reservation_id'];
         $sql = "UPDATE reservation SET start_date = :new_start_date, end_date = :new_end_date WHERE reservation_id = :reservation_id";
         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $st->execute(array(':new_start_date' => $new_start_date, ':new_end_date' => $new_end_date, ':reservation_id' => $reservation_id));
+        $st->execute(array(':new_start_date' => date("Y-m-d H:i:s", $new_start_date), ':new_end_date' => date("Y-m-d H:i:s", $new_end_date), ':reservation_id' => $reservation_id));
         header('Location: choose-functionality.php');
         exit;
     }
@@ -153,19 +154,20 @@ require 'start.php';
 
                 <tbody>
                 <?php
-                $sql = "SELECT reservation_id, reservation_has_room.location as location, num, extra_bed, cost, category, people, cost_extra_bed FROM reservation_has_room, room WHERE num = room_no AND reservation_id = :reservation_id";
-                $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-                $st->execute(array(':reservation_id' => $reservation_id));
-                foreach ($st->fetchAll() as $row) {
-                    $num = $row['num'];
-                    $category = $row['category'];
-                    $people = $row['people'];
-                    $cost = $row['cost'];
-                    $cost_extra_bed = $row['cost_extra_bed'];
-                    $_SESSION['location'] = $row['location'];
-                    $extra_bed = $row['extra_bed'];
-                    $checked = $extra_bed ? "checked='checked'" : "";
-                    print "<tr>
+                if (isset($reservation_id)) {
+                    $sql = "SELECT reservation_id, reservation_has_room.location as location, num, extra_bed, cost, category, people, cost_extra_bed FROM reservation_has_room, room WHERE num = room_no AND reservation_id = :reservation_id";
+                    $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                    $st->execute(array(':reservation_id' => $reservation_id));
+                    foreach ($st->fetchAll() as $row) {
+                        $num = $row['num'];
+                        $category = $row['category'];
+                        $people = $row['people'];
+                        $cost = $row['cost'];
+                        $cost_extra_bed = $row['cost_extra_bed'];
+                        $_SESSION['location'] = $row['location'];
+                        $extra_bed = $row['extra_bed'];
+                        $checked = $extra_bed ? "checked='checked'" : "";
+                        print "<tr>
                     <td>{$num}</td>          <!-- variable num -->
                     <td>{$category}</td>     <!-- variable category -->
                     <td>{$people}</td>            <!-- variable people -->
@@ -177,6 +179,7 @@ require 'start.php';
                         <label for='extra-bed-{$num}'></label>
                     </td>
                 </tr>";
+                    }
                 }
                 ?>
                 </tbody>
