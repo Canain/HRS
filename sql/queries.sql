@@ -44,3 +44,12 @@ SELECT * FROM management WHERE username = :username AND password = :password;
 --Registration
 INSERT INTO customer VALUES (:username,:password,:email);
 
+--Cancel Reservation
+SELECT total_cost, is_cancelled FROM reservation WHERE reservation_id = :id;
+            UPDATE reservation SET is_cancelled = 1, total_cost =
+            CASE WHEN datediff(start_date, current_date()) > 3 THEN 0
+            WHEN datediff(start_date, current_date()) > 1 THEN total_cost / 5
+            ELSE total_cost END WHERE reservation_id = :id AND is_cancelled = 0;
+
+SELECT total_cost FROM reservation WHERE reservation_id = :id AND is_cancelled = 1
+
