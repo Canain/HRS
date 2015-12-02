@@ -37,7 +37,7 @@ require 'start.php';
                 </div>
                 <div class="input-field col s12">
                     <input id="password" name="password" type="password" class="validate">
-                    <label for="disabled">Password</label>
+                    <label for="password">Password</label>
                 </div>
             </div>
             <div class="row">
