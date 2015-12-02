@@ -21,6 +21,7 @@ if (isset($_POST["reservation_id"])) {
         } else {
             print "No valid reservation found";
         }
+        exit;
     } catch (Exception $ex) {
         print $ex;
     }
