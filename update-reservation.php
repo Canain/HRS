@@ -94,6 +94,7 @@ if (isset($_POST['update'])) {
 }
 require 'start.php';
 ?>
+    <h2>Update your Reservation</h2>
     <div id="reservation_search">
         <form method="post" class="col s12">
             <div class="row">

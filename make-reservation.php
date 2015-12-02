@@ -46,6 +46,7 @@ require 'start.php';
 ?>
 
     <div id="confirm">
+        <h2>Make a Reservation</h2>
         <div class="row">
             <div class="col s12">
                 <div class="row">

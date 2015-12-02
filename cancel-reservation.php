@@ -21,6 +21,7 @@ if (isset($_POST["reservation_id"])) {
         } else {
             print "No valid reservation found";
         }
+        exit;
     } catch (Exception $ex) {
         print $ex;
     }
@@ -29,6 +30,7 @@ require 'start.php';
 ?>
 
 <div id="reservation_search">
+    <h2>Cancel a Reservation</h2>
     <div class="row">
         <form method="post" class="col s12">
             <div class="row">
