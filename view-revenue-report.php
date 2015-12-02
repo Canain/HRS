@@ -3,6 +3,7 @@ require 'base.php';
 require 'start.php';
 ?>
 <div id="selectrooms">
+    <h2>View Revenue Report</h2>
     <form method="post">
         <p>
             <input type="checkbox" id="January" name="January"/>
