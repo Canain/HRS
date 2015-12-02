@@ -29,6 +29,7 @@ require 'start.php';
 ?>
 
 <div id="reservation_search">
+    <h2>Cancel a Reservation</h2>
     <div class="row">
         <form method="post" class="col s12">
             <div class="row">

@@ -16,13 +16,14 @@ if (isset($_POST["location-dropdown"]) && isset($_POST["rating-dropdown"]) && is
         print $ex;
     }
 } else {
-    print "Not all of the options are set";
+
 }
 require 'start.php';
 ?>
 
 
 <div class="row">
+    <h2>Provide Feedback</h2>
     <form method="post" class="col s12">
         <select name="location-dropdown" class="browser-default">
             <option disabled selected value="">Location</option>

@@ -3,7 +3,7 @@ require 'base.php';
 require 'start.php';
 ?>
 <h2>
-    Hotel Location
+    View Feedback
 </h2>
 
 <form method="post">
