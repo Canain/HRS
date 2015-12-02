@@ -3,13 +3,13 @@ require 'base.php';
 if (isset($_POST["reservation_id"])) {
     $id = $_POST["reservation_id"];
     try {
-        $sql = "SELECT total_cost, is_cancelled FROM reservation WHERE reservation_id = :id;"
-            . " UPDATE reservation SET is_cancelled = 1, total_cost = "
-            . "CASE WHEN datediff(start_date, current_date()) > 3 THEN 0 "
-            . "WHEN datediff(start_date, current_date()) > 1 THEN total_cost / 5 "
-            . "ELSE total_cost END WHERE reservation_id = :id AND is_cancelled = 0;";
+        $sql = "SELECT total_cost, is_cancelled FROM reservation WHERE reservation_id = :id;
+                UPDATE reservation SET is_cancelled = 1, total_cost =
+                CASE WHEN datediff(start_date, current_date()) > 3 THEN 0
+                WHEN datediff(start_date, current_date()) > 1 THEN total_cost / 5
+                ELSE total_cost END WHERE reservation_id = :id AND is_cancelled = 0 AND username = :username;";
         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $st->execute(array(':id' => $id));
+        $st->execute(array(':id' => $id, ':username' => $_SESSION['username']));
         $initial = $st->fetch();
 
         $sql = "SELECT total_cost FROM reservation WHERE reservation_id = :id AND is_cancelled = 1";
