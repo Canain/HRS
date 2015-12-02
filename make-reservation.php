@@ -28,7 +28,7 @@ if (isset($_POST['make'])) {
 
     $sql = "SELECT p.exp_date as exp_date FROM payment AS p WHERE  p.card_no = :card_no";
     $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-    $st->execute(array('$card_no' => $card_no));
+    $st->execute(array(':card_no' => $card_no));
     $row = $st->fetch();
     if (!$row) {
         print "Reservation not found";
