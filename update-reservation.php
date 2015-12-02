@@ -27,8 +27,8 @@ if (isset($_POST['new_start_date']) && !empty($_POST['new_start_date'])
     $_SESSION['new_end_date'] = $new_end_date;
     $reservation_id = $_SESSION['reservation_id'];
     if (!$new_start_date || !$new_end_date
-        || $new_start_date - time() < 0
-        || $new_end_date - $new_start_date < 0) {
+        || $new_start_date - time() < 3
+        || $new_end_date - $new_start_date <= 0) {
         print "Bad date";
         $_SESSION['update'] = false;
         exit;

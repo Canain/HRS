@@ -35,7 +35,7 @@ INSERT INTO payment VALUES (:card_no, :cvv, :exp_date, :name, :username);
 --Delete Card
 delete from payment where card_no=:card_no and username=:username;
 --Card dropdown list
-SELECT p.card_no % 10000 as last, p.card_no FROM payment AS p WHERE username = :username
+SELECT p.card_no % 10000 as last, p.card_no, p.exp_date FROM payment AS p WHERE username = :username
 AND NOT EXISTS (SELECT * FROM reservation AS r WHERE username = :username
   AND is_cancelled = 0 AND r.card_no = p.card_no
   AND DATEDIFF(r.start_date, CURRENT_DATE()) > 0);
