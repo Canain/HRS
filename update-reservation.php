@@ -2,6 +2,7 @@
 require 'base.php';
 if (isset($_POST['reservation_id'])) {
     $reservation_id = $_POST['reservation_id'];
+    $_SESSION['reservation_id'] = $reservation_id;
     $username = $_SESSION['username'];
     $sql = "SELECT * FROM reservation WHERE reservation_id = :reservation_id AND username = :username AND is_cancelled = 0";
     $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
@@ -18,9 +19,20 @@ if (isset($_POST['reservation_id'])) {
     $cur_start_date = $start_date;
     $cur_end_date = $end_date;
 }
-if (isset($_POST['new_start_date'])) {
+if (isset($_POST['new_start_date']) && !empty($_POST['new_start_date'])
+        && isset($_POST['new_end_date']) && !empty($_POST['new_end_date'])) {
     $new_start_date = strtotime($_POST['new_start_date']);
+    $_SESSION['new_start_date'] = $new_start_date;
     $new_end_date = strtotime($_POST['new_end_date']);
+    $_SESSION['new_end_date'] = $new_end_date;
+    $reservation_id = $_SESSION['reservation_id'];
+    if (!$new_start_date || !$new_end_date
+        || $new_start_date - time() < 0
+        || $new_end_date - $new_start_date < 0) {
+        print "Bad date";
+        $_SESSION['update'] = false;
+        exit;
+    }
     $sql = "SELECT
     (SELECT
             COUNT(*)
@@ -43,12 +55,9 @@ if (isset($_POST['new_start_date'])) {
                         AND rs.reservation_id != :reservation_id
                         AND rs.reservation_id = rhr.reservation_id
                         AND is_cancelled = 0
-                        AND ((DATE(start_date) >= :new_start_date
-                        AND DATE(end_date) <= :new_start_date)
-                        OR (DATE(start_date) <= :new_end_date
-                        AND DATE(end_date) >= :new_end_date)
-                        OR (DATE(start_date) >= :new_start_date
-                        AND DATE(end_date) <= :new_end_date)))) -
+                        AND ((DATE(start_date) <= :new_start_date AND DATE(end_date) >= :new_start_date)
+                        OR (DATE(start_date) <= :new_end_date AND DATE(end_date) >= :new_end_date)
+                        OR (DATE(start_date) >= :new_start_date AND DATE(end_date) <= :new_end_date)))) -
 		(SELECT
             COUNT(*)
         FROM
@@ -58,7 +67,7 @@ if (isset($_POST['new_start_date'])) {
 FROM DUAL";
     $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
     try {
-        $st->execute(array(':reservation_id' => $_SESSION['reservation_id'], ':location' => $_SESSION['location'], ':new_start_date' => date("Y-m-d H:i:s",
+        $st->execute(array(':reservation_id' => $reservation_id, ':location' => $_SESSION['location'], ':new_start_date' => date("Y-m-d H:i:s",
             $new_start_date), ':new_end_date' => date("Y-m-d H:i:s", $new_end_date)));
     } catch (Exception $ex) {
         print $ex;
@@ -66,8 +75,10 @@ FROM DUAL";
     $row = $st->fetch();
     if ($row[0] != 0) {
         print 'Some rooms are not available for that time';
+        $_SESSION['update'] = false;
         exit;
     }
+    $_SESSION['update'] = true;
 }
 if (isset($_POST['update'])) {
     if (isset($_SESSION['update']) && $_SESSION['update']) {
