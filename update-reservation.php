@@ -13,6 +13,7 @@ if (isset($_POST['reservation_id'])) {
         exit;
     }
     $start_date = $row['start_date'];
+    $_SESSION['start_date'] = $start_date;
     $end_date = $row['end_date'];
     $is_cancelled = $row['is_cancelled'];
     $total_cost = $row['total_cost'];
@@ -27,7 +28,7 @@ if (isset($_POST['new_start_date']) && !empty($_POST['new_start_date'])
     $_SESSION['new_end_date'] = $new_end_date;
     $reservation_id = $_SESSION['reservation_id'];
     if (!$new_start_date || !$new_end_date
-        || $new_start_date - time() < 3
+        || $_SESSION['start_date'] - time() < 3
         || $new_end_date - $new_start_date <= 0) {
         print "Bad date";
         $_SESSION['update'] = false;
