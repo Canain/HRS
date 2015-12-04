@@ -8,8 +8,12 @@ if (isset($_POST["username"])) {
         $st = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $st->execute(array(':username' => $username, ':password' => $password));
         if ($st->rowCount()) {
+            $rows = $st->fetchAll();
             $_SESSION["username"] = $username;
             $_SESSION["manager"] = false;
+            foreach($rows as $row) {
+                $_SESSION['email'] = $row['email'];
+            }
             header('Location: choose-functionality.php');
         } else {
             $sql = 'SELECT * FROM management WHERE username = :username AND password = :password';

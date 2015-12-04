@@ -13,6 +13,10 @@ try {
     $reservation = $st->fetchAll();
     foreach ($reservation as $res) {
         print $res['resid'];
+        $myemail = $_SESSION['email'];
+        $message = 'Your reservation id is: ' . $res['resid'];
+        $subject = 'Your reservation';
+        mail($myemail, $subject, $message);
     }
 } catch (PDOException $ex) {
     print $ex;
